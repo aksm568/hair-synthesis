@@ -375,6 +375,7 @@ const SynthesisEditor = () => {
         // 헤어스타일 합성 (실제로는 더 복잡한 로직이 필요)
         if (hairStyle) {
           const hairImg = new Image();
+          hairImg.crossOrigin = 'anonymous'; // CORS 설정 추가
           hairImg.onload = () => {
             ctx.save();
             ctx.globalAlpha = adjustments.opacity;
@@ -392,6 +393,9 @@ const SynthesisEditor = () => {
               hairImg.height
             );
             ctx.restore();
+          };
+          hairImg.onerror = (error) => {
+            console.error('헤어스타일 이미지 로드 실패:', error);
           };
           hairImg.src = hairStyle.imageUrl;
         }
