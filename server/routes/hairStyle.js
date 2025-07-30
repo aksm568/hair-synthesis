@@ -34,7 +34,14 @@ router.get('/', async (req, res) => {
     }
 
     const hairStyles = await HairStyle.find(query).sort({ createdAt: -1 });
-    res.json(hairStyles);
+    
+    // 이미지 URL을 전체 URL로 변환
+    const hairStylesWithFullUrls = hairStyles.map(style => ({
+      ...style.toObject(),
+      imageUrl: style.imageUrl ? `${req.protocol}://${req.get('host')}${style.imageUrl}` : style.imageUrl
+    }));
+    
+    res.json(hairStylesWithFullUrls);
   } catch (error) {
     res.status(500).json({ message: '서버 오류가 발생했습니다' });
   }
@@ -47,7 +54,14 @@ router.get('/:id', async (req, res) => {
     if (!hairStyle) {
       return res.status(404).json({ message: '헤어스타일을 찾을 수 없습니다' });
     }
-    res.json(hairStyle);
+    
+    // 이미지 URL을 전체 URL로 변환
+    const hairStyleWithFullUrl = {
+      ...hairStyle.toObject(),
+      imageUrl: hairStyle.imageUrl ? `${req.protocol}://${req.get('host')}${hairStyle.imageUrl}` : hairStyle.imageUrl
+    };
+    
+    res.json(hairStyleWithFullUrl);
   } catch (error) {
     res.status(500).json({ message: '서버 오류가 발생했습니다' });
   }
@@ -60,7 +74,14 @@ router.get('/category/:category', async (req, res) => {
       category: req.params.category, 
       isActive: true 
     }).sort({ createdAt: -1 });
-    res.json(hairStyles);
+    
+    // 이미지 URL을 전체 URL로 변환
+    const hairStylesWithFullUrls = hairStyles.map(style => ({
+      ...style.toObject(),
+      imageUrl: style.imageUrl ? `${req.protocol}://${req.get('host')}${style.imageUrl}` : style.imageUrl
+    }));
+    
+    res.json(hairStylesWithFullUrls);
   } catch (error) {
     res.status(500).json({ message: '서버 오류가 발생했습니다' });
   }
