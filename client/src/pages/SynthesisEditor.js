@@ -323,7 +323,7 @@ const SynthesisEditor = () => {
 
   const fetchHairStyle = async () => {
     try {
-      const response = await axios.get(`/api/hair-styles/${hairStyleId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/hair-styles/${hairStyleId}`);
       setHairStyle(response.data);
     } catch (error) {
       console.error('헤어스타일을 불러오는데 실패했습니다:', error);
@@ -437,12 +437,12 @@ const SynthesisEditor = () => {
         setSynthesisId(response.data.synthesis._id);
 
         // 합성 생성 후 바로 좋아요 추가
-        await axios.post(`/api/synthesis/${response.data.synthesis._id}/like`);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${response.data.synthesis._id}/like`);
         setIsLiked(true);
         alert('좋아요가 추가되었습니다!');
       } else {
         // 좋아요 토글
-        await axios.post(`/api/synthesis/${synthesisId}/like`);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${synthesisId}/like`);
         setIsLiked(!isLiked);
         alert(isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 추가되었습니다!');
       }
