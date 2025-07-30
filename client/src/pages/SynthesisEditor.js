@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { FaUpload, FaUndo, FaRedo, FaHeart, FaDownload, FaArrowLeft, FaCamera, FaVideo, FaStop } from 'react-icons/fa';
 import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 
 const EditorContainer = styled.div`
   padding: 40px 20px;
@@ -295,6 +296,7 @@ const MethodButton = styled.button`
 const SynthesisEditor = () => {
   const { hairStyleId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const [hairStyle, setHairStyle] = useState(null);
@@ -415,8 +417,19 @@ const SynthesisEditor = () => {
       return;
     }
 
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
     setLoading(true);
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('인증 토큰이 없습니다. 다시 로그인해주세요.');
+        return;
+      }
+
       if (!synthesisId) {
         // 합성 생성 후 좋아요
         const canvas = canvasRef.current;
@@ -431,7 +444,7 @@ const SynthesisEditor = () => {
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
           }
         });
 
@@ -440,7 +453,7 @@ const SynthesisEditor = () => {
         // 합성 생성 후 바로 좋아요 추가
         await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${response.data.synthesis._id}/like`, {}, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
           }
         });
         setIsLiked(true);
@@ -449,14 +462,21 @@ const SynthesisEditor = () => {
         // 좋아요 토글
         await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${synthesisId}/like`, {}, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
           }
         });
         setIsLiked(!isLiked);
         alert(isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 추가되었습니다!');
       }
     } catch (error) {
-      alert('좋아요 처리 중 오류가 발생했습니다.');
+      console.error('좋아요 오류:', error);
+      if (error.response?.status === 401) {
+        alert('인증이 만료되었습니다. 다시 로그인해주세요.');
+      } else if (error.response?.status === 404) {
+        alert('합성을 찾을 수 없습니다.');
+      } else {
+        alert(`좋아요 처리 중 오류가 발생했습니다: ${error.response?.data?.message || error.message}`);
+      }
     } finally {
       setLoading(false);
     }
