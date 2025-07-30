@@ -25,3 +25,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Server (deployed to Railway)
+server/
