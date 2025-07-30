@@ -172,7 +172,7 @@ const Profile = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      await axios.put('/api/user/profile', formData);
+              await axios.put(`${process.env.REACT_APP_API_URL}/api/user/profile`, formData);
       setMessage({ type: 'success', text: '프로필이 성공적으로 업데이트되었습니다!' });
       setIsEditing(false);
     } catch (error) {

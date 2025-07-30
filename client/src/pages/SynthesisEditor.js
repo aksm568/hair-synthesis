@@ -428,7 +428,7 @@ const SynthesisEditor = () => {
         formData.append('hairStyleId', hairStyleId);
         formData.append('adjustments', JSON.stringify(adjustments));
 
-        const response = await axios.post('/api/synthesis', formData, {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

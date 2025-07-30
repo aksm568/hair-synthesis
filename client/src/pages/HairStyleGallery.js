@@ -180,7 +180,7 @@ const HairStyleGallery = () => {
   const fetchHairStyles = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/hair-styles');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/hair-styles`);
       setHairStyles(response.data);
     } catch (err) {
       setError('헤어스타일을 불러오는데 실패했습니다.');

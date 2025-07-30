@@ -241,7 +241,7 @@ const LikedSyntheses = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get('/api/synthesis/liked');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/synthesis/liked`);
       setLikedSyntheses(response.data);
     } catch (err) {
       setError('좋아요한 합성을 불러오는데 실패했습니다.');

@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('/api/auth/me');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`);
       setUser(response.data);
     } catch (error) {
       localStorage.removeItem('token');
@@ -39,8 +39,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // 로그인 요청에는 Authorization 헤더를 붙이지 않음
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { email, password });
       const { token: newToken, user: userData } = response.data;
       localStorage.setItem('token', newToken);
       setToken(newToken);
@@ -57,8 +56,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
-      // 회원가입 요청에도 Authorization 헤더를 붙이지 않음
-      const response = await axios.post('/api/auth/register', { 
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, { 
         username, 
         email, 
         password 

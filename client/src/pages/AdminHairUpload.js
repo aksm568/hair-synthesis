@@ -29,7 +29,7 @@ const AdminHairUpload = () => {
     data.append('image', form.image);
 
     try {
-      await axios.post('/api/hair-styles', data, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setMessage('헤어스타일 등록 성공!');
