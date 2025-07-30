@@ -102,10 +102,20 @@ router.get('/liked', auth, async (req, res) => {
       .populate('user', 'username')
       .sort({ createdAt: -1 });
     
-    const result = syntheses.map(s => ({
-      ...s.toObject(),
-      isLiked: true
-    }));
+    // 이미지 URL을 프록시 URL로 변환 (CORS 문제 해결)
+    const result = syntheses.map(s => {
+      const synthesis = s.toObject();
+      return {
+        ...synthesis,
+        isLiked: true,
+        synthesizedImage: synthesis.synthesizedImage ? 
+          `${req.protocol}://${req.get('host')}/api/proxy-image/${synthesis.synthesizedImage.split('/').pop()}` : 
+          synthesis.synthesizedImage,
+        originalImage: synthesis.originalImage ? 
+          `${req.protocol}://${req.get('host')}/api/proxy-image/${synthesis.originalImage.split('/').pop()}` : 
+          synthesis.originalImage
+      };
+    });
     
     res.json(result);
   } catch (error) {

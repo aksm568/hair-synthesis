@@ -252,13 +252,28 @@ const LikedSyntheses = () => {
 
   const handleToggleLike = async (synthesisId) => {
     try {
-      await axios.post(`/api/synthesis/${synthesisId}/like`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('인증 토큰이 없습니다. 다시 로그인해주세요.');
+        return;
+      }
+
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${synthesisId}/like`, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       // 좋아요 목록에서 제거
       setLikedSyntheses(prev => 
         prev.filter(synthesis => synthesis._id !== synthesisId)
       );
     } catch (error) {
       console.error('좋아요 취소에 실패했습니다:', error);
+      if (error.response?.status === 401) {
+        alert('인증이 만료되었습니다. 다시 로그인해주세요.');
+      } else {
+        alert('좋아요 취소 중 오류가 발생했습니다.');
+      }
     }
   };
 
