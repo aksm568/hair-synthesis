@@ -430,19 +430,28 @@ const SynthesisEditor = () => {
 
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
 
         setSynthesisId(response.data.synthesis._id);
 
         // 합성 생성 후 바로 좋아요 추가
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${response.data.synthesis._id}/like`);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${response.data.synthesis._id}/like`, {}, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setIsLiked(true);
         alert('좋아요가 추가되었습니다!');
       } else {
         // 좋아요 토글
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${synthesisId}/like`);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/synthesis/${synthesisId}/like`, {}, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         setIsLiked(!isLiked);
         alert(isLiked ? '좋아요가 취소되었습니다.' : '좋아요가 추가되었습니다!');
       }
