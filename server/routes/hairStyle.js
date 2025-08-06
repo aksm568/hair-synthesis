@@ -1,19 +1,7 @@
 const express = require('express');
 const HairStyle = require('../models/HairStyle');
-const multer = require('multer');
-const path = require('path');
 
 const router = express.Router();
-
-// 이미지 업로드 설정
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => {
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + unique + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
 
 // 모든 헤어스타일 가져오기
 router.get('/', async (req, res) => {
@@ -87,11 +75,13 @@ router.get('/category/:category', async (req, res) => {
   }
 });
 
-// 헤어스타일 등록 (관리자용)
-router.post('/', upload.single('image'), async (req, res) => {
+// 헤어스타일 등록 (Cloudinary URL만 저장)
+router.post('/', async (req, res) => {
   try {
-    const { name, description, category, tags } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+    const { name, description, category, tags, imageUrl } = req.body;
+    if (!imageUrl) {
+      return res.status(400).json({ message: '이미지 URL이 필요합니다' });
+    }
     const hairStyle = new HairStyle({
       name,
       description,

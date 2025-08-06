@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const CLOUD_NAME = 'dda45n7en';
+const UPLOAD_PRESET = 'unsigned_preset';
+
+const uploadToCloudinary = async (file) => {
+  const data = new FormData();
+  data.append('file', file);
+  data.append('upload_preset', UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: data,
+  });
+  const result = await res.json();
+  return result.secure_url;
+};
+
 const AdminHairUpload = () => {
   const [form, setForm] = useState({
     name: '',
