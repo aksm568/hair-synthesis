@@ -82,11 +82,18 @@ router.post('/', async (req, res) => {
     if (!imageUrl) {
       return res.status(400).json({ message: '이미지 URL이 필요합니다' });
     }
+    // tags가 배열이든 문자열이든 모두 처리
+    let tagsArray = [];
+    if (Array.isArray(tags)) {
+      tagsArray = tags;
+    } else if (typeof tags === 'string') {
+      tagsArray = tags.split(',').map(t => t.trim());
+    }
     const hairStyle = new HairStyle({
       name,
       description,
       category,
-      tags: tags ? tags.split(',').map(t => t.trim()) : [],
+      tags: tagsArray,
       imageUrl
     });
     await hairStyle.save();
