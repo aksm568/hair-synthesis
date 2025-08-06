@@ -272,7 +272,14 @@ const HairStyleGallery = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <HairStyleImage src={hairStyle.imageUrl} alt={hairStyle.name} />
+              <HairStyleImage
+                src={
+                  hairStyle.imageUrl.startsWith('http')
+                    ? hairStyle.imageUrl
+                    : `${process.env.REACT_APP_API_URL}${hairStyle.imageUrl}`
+                }
+                alt={hairStyle.name}
+              />
               <HairStyleInfo>
                 <HairStyleName>{hairStyle.name}</HairStyleName>
                 <HairStyleCategory>{hairStyle.category}</HairStyleCategory>
