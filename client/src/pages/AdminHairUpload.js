@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const CLOUD_NAME = 'dda45n7en';
-const UPLOAD_PRESET = 'unsigned_preset';
+const UPLOAD_PRESET = 'unsigned-preset';
 
 const uploadToCloudinary = async (file) => {
   const data = new FormData();
