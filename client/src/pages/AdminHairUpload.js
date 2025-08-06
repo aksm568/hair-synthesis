@@ -15,7 +15,7 @@ const uploadToCloudinary = async (file) => {
     body: data,
   });
   const result = await res.json();
-  console.log('Cloudinary response:', result); // 응답 확인
+  console.log('Cloudinary response:', JSON.stringify(result, null, 2));
   return result.secure_url;
 };
 
