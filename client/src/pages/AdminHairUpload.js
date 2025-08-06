@@ -5,15 +5,17 @@ const CLOUD_NAME = 'dda45n7en';
 const UPLOAD_PRESET = 'unsigned-preset';
 
 const uploadToCloudinary = async (file) => {
+  console.log('Uploading file:', file); // 파일 확인
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', UPLOAD_PRESET);
+  console.log('Upload preset:', UPLOAD_PRESET); // preset 확인
   const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
     method: 'POST',
     body: data,
   });
   const result = await res.json();
-  console.log('Cloudinary upload result:', result); // 추가!
+  console.log('Cloudinary response:', result); // 응답 확인
   return result.secure_url;
 };
 
@@ -37,21 +39,17 @@ const AdminHairUpload = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const data = new FormData();
-    data.append('name', form.name);
-    data.append('description', form.description);
-    data.append('category', form.category);
-    data.append('tags', form.tags);
-    data.append('image', form.image);
-
+    setMessage('');
     try {
+      console.log('Form image:', form.image); // 이미지 파일 확인
       const imageUrl = await uploadToCloudinary(form.image);
-      console.log('imageUrl:', imageUrl);
+      console.log('Final imageUrl:', imageUrl); // 최종 URL 확인
       await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setMessage('헤어스타일 등록 성공!');
     } catch (err) {
+      console.error('Error:', err); // 에러 확인
       setMessage('등록 실패: ' + (err.response?.data?.message || '오류'));
     }
   };
