@@ -44,7 +44,7 @@ const AdminHairUpload = () => {
       console.log('Form image:', form.image); // 이미지 파일 확인
       const imageUrl = await uploadToCloudinary(form.image);
       console.log('Final imageUrl:', imageUrl); // 최종 URL 확인
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, data, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setMessage('헤어스타일 등록 성공!');
