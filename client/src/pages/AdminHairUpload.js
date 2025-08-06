@@ -41,15 +41,29 @@ const AdminHairUpload = () => {
     e.preventDefault();
     setMessage('');
     try {
-      console.log('Form image:', form.image); // 이미지 파일 확인
+      // 1. Cloudinary에 이미지 업로드
       const imageUrl = await uploadToCloudinary(form.image);
-      console.log('Final imageUrl:', imageUrl); // 최종 URL 확인
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, form, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+
+      // 2. 서버로 보낼 데이터 콘솔에 출력
+      console.log('서버로 보낼 데이터:', {
+        name: form.name,
+        description: form.description,
+        category: form.category,
+        tags: form.tags,
+        imageUrl,
       });
+
+      // 3. 서버로 정보 전송
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, {
+        name: form.name,
+        description: form.description,
+        category: form.category,
+        tags: form.tags,
+        imageUrl,
+      });
+
       setMessage('헤어스타일 등록 성공!');
     } catch (err) {
-      console.error('Error:', err); // 에러 확인
       setMessage('등록 실패: ' + (err.response?.data?.message || '오류'));
     }
   };
