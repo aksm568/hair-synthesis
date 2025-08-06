@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaCamera, FaSave, FaEdit } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileContainer = styled.div`
   padding: 40px 20px;
@@ -156,6 +157,7 @@ const Profile = () => {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const navigate = useNavigate();
 
 
   const handleInputChange = (e) => {
@@ -297,6 +299,16 @@ const Profile = () => {
             >
               <FaEdit />
               프로필 편집
+            </SaveButton>
+            {/* 헤어스타일 추가 버튼 */}
+            <SaveButton
+              type="button"
+              onClick={() => navigate('/admin/hair-upload')}
+              style={{ marginTop: '20px', marginLeft: '10px', background: '#ffb300' }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              + 헤어스타일 추가
             </SaveButton>
           </ProfileSection>
         )}
