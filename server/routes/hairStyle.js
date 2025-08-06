@@ -26,7 +26,9 @@ router.get('/', async (req, res) => {
     // 이미지 URL을 프록시 URL로 변환 (CORS 문제 해결)
     const hairStylesWithFullUrls = hairStyles.map(style => ({
       ...style.toObject(),
-      imageUrl: style.imageUrl ? `${req.protocol}://${req.get('host')}/api/proxy-image/${style.imageUrl.split('/').pop()}` : style.imageUrl
+      imageUrl: style.imageUrl && style.imageUrl.startsWith('http')
+        ? style.imageUrl
+        : `${req.protocol}://${req.get('host')}/api/proxy-image/${style.imageUrl.split('/').pop()}`
     }));
     
     res.json(hairStylesWithFullUrls);
@@ -46,7 +48,9 @@ router.get('/:id', async (req, res) => {
     // 이미지 URL을 프록시 URL로 변환 (CORS 문제 해결)
     const hairStyleWithFullUrl = {
       ...hairStyle.toObject(),
-      imageUrl: hairStyle.imageUrl ? `${req.protocol}://${req.get('host')}/api/proxy-image/${hairStyle.imageUrl.split('/').pop()}` : hairStyle.imageUrl
+      imageUrl: hairStyle.imageUrl && hairStyle.imageUrl.startsWith('http')
+        ? hairStyle.imageUrl
+        : `${req.protocol}://${req.get('host')}/api/proxy-image/${hairStyle.imageUrl.split('/').pop()}`
     };
     
     res.json(hairStyleWithFullUrl);
@@ -66,7 +70,9 @@ router.get('/category/:category', async (req, res) => {
     // 이미지 URL을 프록시 URL로 변환 (CORS 문제 해결)
     const hairStylesWithFullUrls = hairStyles.map(style => ({
       ...style.toObject(),
-      imageUrl: style.imageUrl ? `${req.protocol}://${req.get('host')}/api/proxy-image/${style.imageUrl.split('/').pop()}` : style.imageUrl
+      imageUrl: style.imageUrl && style.imageUrl.startsWith('http')
+        ? style.imageUrl
+        : `${req.protocol}://${req.get('host')}/api/proxy-image/${style.imageUrl.split('/').pop()}`
     }));
     
     res.json(hairStylesWithFullUrls);
