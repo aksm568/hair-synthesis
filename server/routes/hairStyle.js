@@ -99,6 +99,7 @@ router.post('/', async (req, res) => {
     await hairStyle.save();
     res.status(201).json({ message: '헤어스타일 등록 완료', hairStyle });
   } catch (error) {
+    console.error('헤어스타일 등록 에러:', error); // 이 줄 추가!
     res.status(500).json({ message: '등록 실패', error });
   }
 });
