@@ -105,7 +105,10 @@ const HairStyleCard = styled(motion.div)`
 const HairStyleImage = styled.img`
   width: 100%;
   height: 250px;
-  object-fit: cover;
+  object-fit: contain;   // cover → contain
+  background: #fff;      // (선택) 배경색 추가
+  display: block;
+  margin: 0 auto;
 `;
 
 const HairStyleInfo = styled.div`
