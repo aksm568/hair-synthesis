@@ -13,6 +13,7 @@ const uploadToCloudinary = async (file) => {
     body: data,
   });
   const result = await res.json();
+  console.log('Cloudinary upload result:', result); // 추가!
   return result.secure_url;
 };
 
@@ -44,6 +45,8 @@ const AdminHairUpload = () => {
     data.append('image', form.image);
 
     try {
+      const imageUrl = await uploadToCloudinary(form.image);
+      console.log('imageUrl:', imageUrl);
       await axios.post(`${process.env.REACT_APP_API_URL}/api/hair-styles`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
